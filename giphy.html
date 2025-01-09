@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giphy Search Engine </title>
+
+  <!-- Link to Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Basic styling */
+    body {
+      font-family: 'Rubik', sans-serif; /* Apply the Google Font to the entire body */
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header styling */
+    header {
+      background-color: #007bff; /* Blue background for header */
+      color: white; /* White text color */
+      padding: 10px 20px; /* Padding inside the header */
+      display: flex; /* Flexbox layout for header */
+      justify-content: space-between; /* Space between title and navigation */
+      align-items: center; /* Vertically center items in the header */
+      flex-wrap: wrap; /* Allow wrapping for responsiveness */
+    }
+
+    /* Navigation styling */
+    nav ul {
+      list-style-type: none; /* Remove default bullet points from the list */
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+      display: flex; /* Flexbox layout for navigation */
+    }
+
+    /* Navigation list item styling */
+    nav ul li {
+      margin: 0 10px; /* Horizontal margin between list items */
+    }
+
+    /* Navigation link styling */
+    nav ul li a {
+      color: white; /* White text color for links */
+      text-decoration: none; /* Remove underline from links */
+      font-weight: bold; /* Bold text for links */
+      cursor: pointer; /* Pointer cursor on hover */
+    }
+
+    /* Header title styling */
+    h1 {
+      margin: 0; /* Remove default margin from the title */
+    }
+
+    /* Search container styling */
+    #search-container {
+      padding: 20px; /* Padding inside the search container */
+      display: flex; /* Flexbox layout for the search container */
+      justify-content: center; /* Center items horizontally */
+      align-items: center; /* Center items vertically */
+    }
+
+    /* Input field styling */
+    #search-container input[type="text"] {
+      padding: 10px; /* Padding inside the input field */
+      margin-right: 10px; /* Margin to the right of the input field */
+      font-size: 16px; /* Set the font size */
+      border: 1px solid #ccc; /* Light gray border */
+      border-radius: 5px; /* Rounded corners for the input field */
+      width: 300px; /* Set the width of the input field */
+    }
+
+    /* Search button styling */
+    #search-container button {
+      padding: 10px 20px; /* Padding inside the button */
+      font-size: 16px; /* Set the font size */
+      background-color: #007bff; /* Blue background for the button */
+      color: white; /* White text color */
+      border: none; /* Remove border */
+      border-radius: 5px; /* Rounded corners for the button */
+      cursor: pointer; /* Pointer cursor on hover */
+    }
+
+    /* Search results container styling */
+    #search-results {
+      display: flex; /* Flexbox layout for search results */
+      flex-wrap: wrap; /* Wrap items to the next line as needed */
+      justify-content: center; /* Center the results */
+      padding: 20px; /* Padding inside the results container */
+    }
+
+    /* Individual GIF container styling */
+    .gif {
+      margin: 10px; /* Margin around each GIF */
+      flex: 1 0 21%; /* Flexbox item: take up 21% of the width with flexibility */
+      box-sizing: border-box; /* Include padding and border in the element's width and height */
+    }
+
+    /* GIF image styling */
+    .gif img {
+      max-width: 100%; /* Make sure the image fits within its container */
+      border-radius: 8px; /* Rounded corners for the images */
+    }
+
+    /* Pagination container styling */
+    .pagination {
+      margin-top: 20px; /* Margin above the pagination buttons */
+      text-align: center; /* Center the pagination buttons */
+    }
+
+    /* Pagination button styling */
+    .pagination button {
+      margin: 5px; /* Margin around the buttons */
+      padding: 10px 15px; /* Padding inside the buttons */
+      background-color: #007bff; /* Blue background for buttons */
+      color: white; /* White text color */
+      border: none; /* Remove border */
+      border-radius: 5px; /* Rounded corners for buttons */
+      cursor: pointer; /* Pointer cursor on hover */
+    }
+
+    /* Disabled pagination button styling */
+    .pagination button:disabled {
+      background-color: #cccccc; /* Gray background for disabled buttons */
+      cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
+    }
+
+    /* Media query for devices with a max width of 768px */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column; /* Stack header items vertically */
+        text-align: center; /* Center text in the header */
+      }
+
+      nav ul {
+        flex-direction: column; /* Stack navigation links vertically */
+      }
+
+      #search-container {
+        flex-direction: column; /* Stack search field and button vertically */
+      }
+
+      #search-container input[type="text"] {
+        width: 100%; /* Full width input field on small screens */
+        margin-bottom: 10px; /* Margin below the input field */
+      }
+
+      .gif {
+        flex: 1 0 46%; /* Two columns on medium screens */
+      }
+    }
+
+    /* Media query for devices with a max width of 480px */
+    @media (max-width: 480px) {
+      .gif {
+        flex: 1 0 100%; /* Single column on small screens */
+      }
+
+      header {
+        padding: 10px; /* Reduce padding in the header */
+      }
+
+      nav ul li {
+        margin: 5px 0; /* Reduce margin between navigation links */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with title and navigation links -->
+  <header>
+    <h1>Giphy Search Engine</h1>
+    <nav>
+      <ul>
+        <li><a onclick="goHome()">Home</a></li> <!-- Home link that triggers goHome() -->
+        <li><a onclick="randomSearch()">Random</a></li> <!-- Random link that triggers randomSearch() -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Search container with input field and search button -->
+  <div id="search-container">
+    <input type="text" id="searchTerm" placeholder="Enter a search term"> <!-- Input field for search term -->
+    <button onclick="searchGiphy(1)">Search</button> <!-- Button that triggers searchGiphy() with page 1 -->
+  </div>
+
+  <!-- Container for displaying search results -->
+  <div id="search-results"></div>
+  
+  <!-- Pagination buttons for navigating through search results -->
+  <div class="pagination">
+    <button id="prevPage" onclick="prevPage()" disabled>Previous</button> <!-- Previous button (disabled initially) -->
+    <button id="nextPage" onclick="nextPage()">Next</button> <!-- Next button -->
+  </div>
+
+  <script>
+    let currentPage = 1; // Variable to track the current page number
+    const imagesPerPage = 8; // Number of images to display per page
+
+    // Function to search for GIFs using the Giphy API
+    function searchGiphy(page) {
+      const searchTerm = document.getElementById('searchTerm').value; // Get the search term from input field
+      const apiKey = '2juLOltfWKyQ37UnSKOJ6j6HNaCJzyhw'; // Your Giphy API key
+      const offset = (page - 1) * imagesPerPage; // Calculate the offset for pagination
+      const url = `http://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${searchTerm}&limit=${imagesPerPage}&offset=${offset}`; // Construct the API URL
+
+      fetch(url) // Fetch data from the Giphy API
+        .then(response => response.json()) // Convert the response to JSON
+        .then(data => {
+          const gifs = data.data; // Extract GIF data from the response
+          const resultsDiv = document.getElementById('search-results'); // Get the search results container
+          resultsDiv.innerHTML = ''; // Clear previous results
+
+          gifs.forEach(gif => { // Loop through each GIF in the response
+            const img = document.createElement('img'); // Create an image element
+            img.src = gif.images.fixed_height.url; // Set the image source to the GIF URL
+            img.alt = gif.title; // Set the alt text to the GIF title
+            img.className = 'gif'; // Add the 'gif' class to the image
+
+            const gifDiv = document.createElement('div'); // Create a container div for the image
+            gifDiv.className = 'gif'; // Add the 'gif' class to the div
+            gifDiv.appendChild(img); // Append the image to the container div
+
+            resultsDiv.appendChild(gifDiv); // Append the container div to the results container
+          });
+
+          currentPage = page; // Update the current page number
+
+          // Enable or disable the pagination buttons based on the current page
+          document.getElementById('prevPage').disabled = currentPage === 1;
+          document.getElementById('nextPage').disabled = gifs.length < imagesPerPage;
+        })
+        .catch(error => console.error('Error:', error)); // Log any errors that occur
+    }
+
+    // Function to go to the next page of results
+    function nextPage() {
+      searchGiphy(currentPage + 1); // Increment the page number and search
+    }
+
+    // Function to go to the previous page of results
+    function prevPage() {
+      if (currentPage > 1) { // Check if the current page is greater than 1
+        searchGiphy(currentPage - 1); // Decrement the page number and search
+      }
+    }
+
+    // Function to reset the page to the home state
+    function goHome() {
+      document.getElementById('searchTerm').value = ''; // Clear the search input field
+      document.getElementById('search-results').innerHTML = ''; // Clear the search results
+      currentPage = 1; // Reset the current page number to 1
+      document.getElementById('prevPage').disabled = true; // Disable the previous button
+      document.getElementById('nextPage').disabled = true; // Disable the next button
+    }
+
+    // Function to perform a random search
+    function randomSearch() {
+      const randomTerms = ['cats', 'dogs', 'funny', 'memes', 'cartoons', 'nature']; // Array of random search terms
+      const randomTerm = randomTerms[Math.floor(Math.random() * randomTerms.length)]; // Select a random term from the array
+      document.getElementById('searchTerm').value = randomTerm; // Set the input field to the random term
+      searchGiphy(1); // Perform the search with the random term
+    }
+  </script>
+</body>
+</html>
